@@ -1,12 +1,13 @@
 #Global Vars
-aws_infra_name = "michael-terraform"
+name      = "michael-terraform"
+namespace = "michael"
+stage     = "dev"
+region    = "eu-west-1"
+
 
 #VPC Vars
-aws_vpc_cidr_block = "10.250.192.0/18"
-aws_cidr_subnets_private = ["10.250.192.0/20","10.250.208.0/20"]
-aws_cidr_subnets_public = ["10.250.224.0/20","10.250.240.0/20"]
-aws_avail_zones = ["eu-west-1a","eu-west-1b"]
-
-default_tags = {
-  Owner = "michael"
-}
+cidr_block = "10.250.192.0/18"
+cidr_subnets_private = ["10.250.192.0/20","10.250.208.0/20"]
+cidr_subnets_public = ["10.250.224.0/20","10.250.240.0/20"]
+pub_az = ["eu-west-1a","eu-west-1b"]
+pri_az = ["eu-west-1c","eu-west-1d"]
