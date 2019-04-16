@@ -4,7 +4,7 @@ locals {
 }
 
 module "private_label" {
-  source     = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.3.0"
+  source     = "../../modules/terraform-null-label-master"
   namespace  = "${var.namespace}"
   name       = "${var.name}"
   stage      = "${var.stage}"
