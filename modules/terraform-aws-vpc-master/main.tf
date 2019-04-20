@@ -1,7 +1,7 @@
-module "label" {
+module "vpc_label" {
   source     = "../../modules/terraform-null-label-master"
   namespace  = "${var.namespace}"
-  name       = "${var.name}"
+  name       = "vpc"
   stage      = "${var.stage}"
   delimiter  = "${var.delimiter}"
   attributes = "${var.attributes}"
@@ -16,10 +16,10 @@ resource "aws_vpc" "default" {
   enable_classiclink               = "${var.enable_classiclink}"
   enable_classiclink_dns_support   = "${var.enable_classiclink_dns_support}"
   assign_generated_ipv6_cidr_block = true
-  tags                             = "${module.label.tags}"
+  tags                             = "${module.vpc_label.tags}"
 }
 
 resource "aws_internet_gateway" "default" {
   vpc_id = "${aws_vpc.default.id}"
-  tags   = "${module.label.tags}"
+  tags   = "${module.vpc_label.tags}"
 }

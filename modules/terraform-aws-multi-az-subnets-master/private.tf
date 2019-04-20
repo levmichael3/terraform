@@ -6,7 +6,7 @@ locals {
 module "private_label" {
   source     = "../../modules/terraform-null-label-master"
   namespace  = "${var.namespace}"
-  name       = "${var.name}"
+  name       = "subnet"
   stage      = "${var.stage}"
   delimiter  = "${var.delimiter}"
   tags       = "${var.tags}"

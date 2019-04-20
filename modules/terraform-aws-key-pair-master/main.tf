@@ -2,7 +2,7 @@ module "label" {
   source     = "../../modules/terraform-null-label-master"
   namespace  = "${var.namespace}"
   stage      = "${var.stage}"
-  name       = "${var.name}"
+  name       = "key_pair"
   attributes = "${var.attributes}"
   delimiter  = "${var.delimiter}"
   tags       = "${var.tags}"

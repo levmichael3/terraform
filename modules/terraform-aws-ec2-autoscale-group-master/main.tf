@@ -1,7 +1,7 @@
 module "label" {
   source     = "../../modules/terraform-null-label-master"
   namespace  = "${var.namespace}"
-  name       = "${var.name}"
+  name       = "asg"
   stage      = "${var.stage}"
   delimiter  = "${var.delimiter}"
   attributes = "${var.attributes}"
@@ -13,6 +13,7 @@ resource "aws_launch_template" "default" {
   count = "${var.enabled == "true" ? 1 : 0}"
 
   name_prefix                          = "${format("%s%s", module.label.id, var.delimiter)}"
+  # name                                 = "${module.label.id}"
   block_device_mappings                = ["${var.block_device_mappings}"]
   credit_specification                 = ["${var.credit_specification}"]
   disable_api_termination              = "${var.disable_api_termination}"

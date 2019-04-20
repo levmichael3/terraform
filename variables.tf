@@ -81,6 +81,20 @@ variable "cpu_utilization_low_threshold_percent" {
   description = "CPU utilization loq threshold"
 }
 
+
+variable "memory_utilization_high_threshold" {
+  type        = "string"
+  description = "The maximum percentage of Memory utilization average."
+  default     = "80"
+}
+
+variable "memory_utilization_low_threshold" {
+  type        = "string"
+  description = "The minimum percentage of Memory utilization average."
+  default     = "20"
+}
+
+
 variable "health_check_type" {
   default = "EC2"
   description = "Controls how health checking is done. Valid values are EC2 or ELB"
