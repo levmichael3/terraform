@@ -117,3 +117,17 @@ variable "fallback_to_ondemand" {
   default     = true
   description = "In a case of no Spot instances available, Elastigroup will launch on-demand instances instead."
 }
+
+variable "spot_percentage" {
+  type        = "string"
+  default     = "0"
+  description = "The percentage of Spot instances that would spin up from the desired_capacity number."
+}
+
+variable "revert_to_spot" {
+  type        = "list"
+  default = [{
+    perform_at = "never"
+  }]
+  description = "Hold settings for strategy correction, replacing On-Demand for Spot instances, Supported Arguments: never / always /timeWindow"
+}

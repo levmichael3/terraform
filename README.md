@@ -5,4 +5,5 @@
 
 
 [EXAMPLE]
+
 `terraform plan -out=tfplan -input=false -var-file='terraform.tfvars' -var-file='secrets/michael-spotinst-token.tfvars' -var-file='secrets/spotinst-account-id.tfvars'`

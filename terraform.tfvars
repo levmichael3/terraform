@@ -26,13 +26,20 @@ memory_utilization_low_threshold = 10
 memory_utilization_high_threshold = 90
 
 wait_for_capacity_timeout = "5m"
-max_size =  "1"
-min_size = "0"
-desired_capacity = "1"
+max_size =  "3"
+min_size = "2"
+desired_capacity = "3"
+
+spot_percentage = "75"
+revert_to_spot  = [
+  {
+    perform_at = "always"
+  }
+]
 
 
-amazon_linux_instance_type = "t2.small"
-instance_types_ondemand    = "t2.small"
-instance_types_spot        = ["t2.small"]
+amazon_linux_instance_type = "t3.nano"
+instance_types_ondemand    = "t3.nano"
+instance_types_spot        = ["t3.nano"]
 
 fallback_to_ondemand       = false

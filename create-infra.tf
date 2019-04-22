@@ -184,10 +184,11 @@ module "spotinst_elastigroup_aws"  {
   orientation                = "${var.orientation}"
 
   security_groups            = ["${module.ssh_sg.this_security_group_id}"]
-  # subnet_ids                 = "${module.public_subnets.az_subnet_ids}"
-  subnet_ids                  = ["${lookup(module.public_subnets.az_subnet_ids, "eu-west-1a")}"]
+  subnet_ids                 = ["${values(module.public_subnets.az_subnet_ids)}"]
 
   fallback_to_ondemand       = "${var.fallback_to_ondemand}"
+  spot_percentage            = "${var.spot_percentage}"
+  revert_to_spot             = "${var.revert_to_spot}"
 
   instance_types_ondemand    = "${var.instance_types_ondemand}"
   instance_types_spot        = "${var.instance_types_spot}"

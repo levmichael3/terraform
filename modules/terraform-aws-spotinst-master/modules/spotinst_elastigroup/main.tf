@@ -50,9 +50,20 @@ resource "spotinst_elastigroup_aws" "default" {
   # availability_zones         = ["${var.availability_zones}"]
 
   fallback_to_ondemand       = "${var.fallback_to_ondemand}"
+  spot_percentage            = "${var.spot_percentage}"
+  revert_to_spot             = "${var.revert_to_spot}"
+
 
   instance_types_ondemand    = "${var.instance_types_ondemand}"
   instance_types_spot        = ["${var.instance_types_spot}"]
   placement_tenancy          = "default"
+
+
+  tags = [
+    {
+      key   = "Name"
+      value = "${module.label.id}"
+    }
+  ]
 
 }
