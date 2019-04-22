@@ -16,6 +16,12 @@ provider "aws" {
   region = "eu-west-1"
 }
 
+# Configure the Spotinst provider
+provider "spotinst" {
+  token         = "${var.spotinst_token}"
+  account       = "${var.spotinst_account}"
+}
+
 data "aws_availability_zones" "available" {}
 
 
@@ -139,53 +145,53 @@ locals {
 USERDATA
 }
 
+#
+#
+#
+#
+#
+# resource "aws_launch_configuration" "centos_lc" {
+#   # name          = "${var.name}"
+#   image_id      = "${data.aws_ami.centos.id}"
+#   instance_type = "t2.micro"
+#
+#   lifecycle {
+#     create_before_destroy = true
+#   }
+# }
 
 
 
+# data "template_file" "az_subnet_ids" {
+#   count    = "${length(var.pub_az)}"
+#   template = "${lookup(var.pub_az[count.index], "az_subnet_ids")}"
+# }
 
-data "aws_ami" "centos" {
-owners      = ["679593333241"]
-most_recent = true
 
-  filter {
-      name   = "name"
-      values = ["CentOS Linux 7 x86_64 HVM EBS *"]
-  }
-
-  filter {
-      name   = "architecture"
-      values = ["x86_64"]
-  }
-
-  filter {
-      name   = "root-device-type"
-      values = ["ebs"]
-  }
-}
-
-module "autoscale_group" {
-  source = "modules/terraform-aws-ec2-autoscale-group-master"
-  namespace           = "${var.namespace}"
-  stage               = "${var.stage}"
+module "spotinst_elastigroup_aws"  {
+  source              = "modules/terraform-aws-spotinst-master/modules/spotinst_elastigroup"
   name                = "${var.name}"
+  stage               = "${var.stage}"
+  namespace           = "${var.namespace}"
+  region              = "${var.region}"
 
-  image_id                    = "${data.aws_ami.centos.id}"
-  instance_type               = "${var.amazon_linux_instance_type}"
-  security_group_ids          = ["${module.vpc.vpc_default_security_group_id}"]
-  subnet_ids                  = []
-  health_check_type           = "${var.health_check_type}"
-  min_size                    = "${var.min_size}"
-  max_size                    = "${var.max_size}"
-  wait_for_capacity_timeout   = "${var.wait_for_capacity_timeout}"
-  associate_public_ip_address = true
-  user_data_base64            = "${base64encode(local.userdata)}"
-  key_name                    = "${module.ssh_key_pair.key_name}"
+  # Run a fixed number of instances in the ASG
+  min_size             = "${var.min_size}"
+  max_size             = "${var.max_size}"
 
+  desired_capacity           = "${var.desired_capacity}"
+  capacity_unit              = "${var.capacity_unit}"
+  orientation                = "${var.orientation}"
 
-  # Auto-scaling policies and CloudWatch metric alarms
-  autoscaling_policies_enabled           = "true"
-  cpu_utilization_high_threshold_percent = "${var.cpu_utilization_high_threshold_percent}"
-  cpu_utilization_low_threshold_percent  = "${var.cpu_utilization_high_threshold_percent}"
+  security_groups            = ["${module.ssh_sg.this_security_group_id}"]
+  # subnet_ids                 = "${module.public_subnets.az_subnet_ids}"
+  subnet_ids                  = ["${lookup(module.public_subnets.az_subnet_ids, "eu-west-1a")}"]
+
+  fallback_to_ondemand       = "${var.fallback_to_ondemand}"
+
+  instance_types_ondemand    = "${var.instance_types_ondemand}"
+  instance_types_spot        = "${var.instance_types_spot}"
+
 
 }
 
@@ -197,10 +203,10 @@ module "ec2_service_alarms" {
   name           = "${var.name}"
 
   cpu_utilization_high_threshold  = "${var.cpu_utilization_high_threshold_percent}"
-  cpu_utilization_high_ok_actions = "${module.notify_slack.this_slack_topic_arn}"
+  cpu_utilization_high_ok_actions = ["${module.notify_slack.this_slack_topic_arn}"]
 
   cpu_utilization_low_threshold       = "${var.cpu_utilization_high_threshold_percent}"
-  cpu_utilization_low_alarm_actions   = "${module.notify_slack.this_slack_topic_arn}"
+  cpu_utilization_low_alarm_actions   = ["${module.notify_slack.this_slack_topic_arn}"]
 
   # cpu_utilization_high_alarm_actions  = "${module.notify_slack.this_slack_topic_arn}"
 

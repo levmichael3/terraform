@@ -2,3 +2,4 @@
 .terraform
 *tfplan*
 *secrets*
+*tar.gz*
